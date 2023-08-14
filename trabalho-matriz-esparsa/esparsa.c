@@ -328,3 +328,27 @@ Matriz *matrix_multiply(Matriz *matA, Matriz *matB){
     }
     return matC;
 }
+Matriz *matrix_transpose(Matriz *matA){
+    int i=0, j=0;
+    float total = 0;
+    Matriz *transposta;
+
+    if (matA->n != matA->m){ 
+        printf("\nNao foi possivel multiplicar as matrizes\nnumero de colunas de A eh diferente do numero de linhas de B\n");
+        return NULL;
+    }
+
+    if (!matA || !matA->m || !matA->n){
+        return NULL;
+    }
+
+    transposta = matrix_create(matA->m, matA->n); //C é formada pelo numero de linhas de A e de colunas de 
+
+    for (i = 1; i <= matA->m; i++){
+        for (j = 1; j <= matA->n; j++){
+          transposta->inicio->direita->coluna = i;
+          transposta->inicio->direita->linha = j;
+        }
+    }
+    return transposta;
+}

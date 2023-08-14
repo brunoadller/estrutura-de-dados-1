@@ -2,114 +2,145 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
 
-//RESPONSÁVEL POR REPRESENTAR OS NÓS QUE APONTARAM APARA OUTROS VALORES DA LISTA
-typedef struct no_circular{
-  int val;
-  NoCircular *prev;
-  NoCircular *next;
-}NoCircular;
-//LISTA QUE TERÁ UM NÓ APONTADO PARA O INICIO E O FINAL DA LISTA
-typedef struct lista_circular{
-  NoCircular *begin;
-  NoCircular *end;
-  size_t size;
-}ListaCircular;
+typedef struct no{
+    int val;
+    No *anterior;
+    No *proximo;
+}No;
+typedef struct lista{
+    No *inicio;
+    No *fim;
+    size_t tamanho;
+}Lista;
 
-NoCircular *criando_no(int val){
-  NoCircular  *no = (NoCircular*) calloc(1, sizeof(NoCircular));
-  /*
-    Isso representa a estrutura no criando apontando para ela mesma enquanto 
-    não tem mais valores adicionados
-    ________
-    |  10  |-------/     
-    |_______|-----|
-  */
-  no->val = val;
-  no->prev = no;
-  no->next = no;
-
-  return no;
+No *cria_no(int val){
+    //aloca ponteiro do tipo no
+    No *pno = (No*) calloc(1,sizeof(No));
+    pno->val = val;
+    pno->anterior = pno;
+    pno->proximo = pno;
+    return pno;
+}
+void destroi_no(No **no_ref){
+    No *pno = *no_ref;
+    free(pno);
+    *no_ref = NULL;
 }
 
-void destruindo_no(NoCircular ** no_referencia){
-  NoCircular *no = *no_referencia;
-  free(no);
-  *no_referencia = NULL;
-}
+Lista *cria_lista(){
+    Lista *L = (Lista*)calloc(1, sizeof(Lista));
 
-ListaCircular *criando_lista_circular(){
-  ListaCircular *L = (ListaCircular *) calloc(1, sizeof(ListaCircular));
-  /*
-    lista apontando para Null
-    para seu inicio e fim
-  */
-  L->begin = NULL;
-  L->end = NULL;
-  L->size = 0;
-
-  return L;
-}
-void add_inicio_lista(ListaCircular *L, int val){
-  //cria um nó p que ira apontar para o 
-  //inicio da lista que terá o primeiro valor
-  NoCircular *p = criando_no(val);
-  if(lista_esta_vazia(L)){
-    L->end = p;
-  }else{
-    //se p sera o novo cabeça da lista p será o L->BEGIN
-    p->next = L->begin;
-    L->begin->prev = p;
-    p->prev = L->end;
-    L->end->next = p;
-  }
-  L->begin = p;
-  //aumentando o tamanho da lista
-  L->size++;
-}
-void destruindo_lista_circular(ListaCircular **lista_referencia){
-  ListaCircular *L = *lista_referencia;
-
-  NoCircular *p = L->begin;
-  NoCircular *aux = NULL;
-  /*
-    PERCORRE DO INICIO DESALOCANDO O PONTEIRO P PARA CADA VALOR 
-    DA LISTA E QUANDO CHEGAR NO ULTMIMO ELE SERÁ DESALOCADO POR FORA DO LAÇO
-    PARA PODER N]AO PERDER O ENDERECO DA LISTA
-  */
- /*
-  enquanto p for diferente do no final, cria-se um auxiliar para destruir o anterior
-  e o p apontar para o proximo
- */
- while(p != L->end){
-  aux = p;
-  p = p->next;
-  destruindo_no(&aux);
- }
- /*Se o p é igual ao nó final depois do laco preciso desalocar ess nó*/
- destruindo_no(&p);
- free(L);
-
-  *lista_referencia = NULL;
+    L->inicio = NULL;
+    L->fim = NULL;
+    L->tamanho = 0;
+    return L;
 
 }
-//outra maneira de destruir a lista
-void destruindo_lista_circular_2(ListaCircular **lista_referencia){
-  ListaCircular *L = *lista_referencia;
-
-  NoCircular *p = L->begin;
-  NoCircular *aux = NULL;
-  for(int i = 0; i < L->size; i++){
-    aux = p;
-    p = p->next;
-    destruindo_no(&aux);
-  }
-  free(L);
-
-  *lista_referencia = NULL;
+void destroi_lista(Lista **lista_ref){
+    Lista *L = *lista_ref;
+    No *p = L->inicio;
+    No * aux = NULL;
+    while (p != L->fim)
+    {
+        aux = p;
+        p = p->proximo;
+        destroi_no(&aux);
+    }
+    destroi_no(&p);
+    free(L);
+    *lista_ref = NULL;
 }
 
-bool lista_esta_vazia(const ListaCircular *L){
-  return L->size == 0;
+bool lista_esta_vazia(Lista *L){
+    return L->tamanho == 0;
 }
 
+void adicioona_no_inicio(Lista *L, int val){
+    No *p = cria_no(val);
+    
+    if(lista_esta_vazia(L)){
+        //se lista vazia p é igual ao nó criado
+        L->fim = p;
+    }else{
+        //se ja tinha um valor na lista ele passa a ser o proximo
+        //e o anterior passa a ser o novo nó do inicio
+        p->proximo = L->inicio;
+        L->inicio->anterior = p;
+
+        p->anterior = L->fim;
+        L->fim->proximo = p;
+    }
+    L->inicio = p;
+    L->tamanho ++;
+}
+void adiciona_no_fim(Lista *L, int val){
+    No *p = cria_no(val);
+    if(lista_esta_vazia(L)){
+        L->inicio = p;
+    }else{
+        L->fim->proximo = p;
+        p->anterior = L->fim;
+        L->inicio->anterior = p;
+        p->proximo = L->inicio;
+    }
+    L->fim = p;
+    L->tamanho++;
+}
+void print(Lista *L){
+    if(lista_esta_vazia(L)){
+        printf("L->NULL\n");
+        printf("L->fim->NULL\n");
+    }else{
+        No *p = L->inicio;
+        printf("L->");
+        do{
+            printf("%d -> ", p->val);
+            p = p->proximo;
+        }while(p != L->inicio);
+        printf("\nL->fim->%d\n", L->fim->val);
+    }
+    printf("Tamanho: %lu\n\n", L->tamanho);
+}
+void remove_da_lista(Lista *L, int val){
+    if(!lista_esta_vazia(L)){
+        No *p = L->inicio;
+        //caso 1: o elemento está na =cabeça da lista
+        if(L->inicio->val == val){
+            //a lista possui um unico elemento
+            if(L->inicio == L->fim){
+                L->inicio = NULL;
+                L->fim = NULL;
+
+            }else{
+                L->inicio = p->proximo;
+                L->inicio->anterior = L->fim;
+                L->fim->proximo = L->inicio;
+            }
+            destroi_no(&p);
+            L->tamanho--;
+        }else{
+            //caso 2 : O elemento está no meio da lista
+            //caso 3 : Oelemento está no final da lista
+            p = p->proximo;
+            while (p != L->inicio)
+            {
+                if(p->val == val){
+                    //elemento está no final da lista
+                    if(L->fim == p){
+                        L->fim = p->anterior;
+                    }
+                    p->anterior->proximo = p->proximo;
+                    p->proximo->anterior = p->anterior;
+                    destroi_no(&p);
+                    L->tamanho--;
+                    break;
+                }else{
+                    p = p->proximo;
+                }
+            }
+            
+        }
+    }
+}

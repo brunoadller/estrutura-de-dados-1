@@ -16,4 +16,5 @@ void matrix_print(Matriz *mat);
 void matrix_destroy(Matriz *mat);
 Matriz *matrix_add(Matriz *matA, Matriz *matB);
 Matriz *matrix_multiply(Matriz *matA, Matriz *matB);
+Matriz *matrix_transpose(Matriz *matA);
 

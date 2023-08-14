@@ -1,14 +1,18 @@
+#include <stddef.h>
 #include <stdbool.h>
 
-typedef struct no_circular NoCircular;
-typedef struct lista_circular ListaCircular;
+typedef struct no No;
+typedef struct lista Lista;
 
-NoCircular *criando_no(int val);
-void destruindo_no(NoCircular ** no_referencia);
+No *cria_no(int val);
+void destroi_no(No **no_ref);
 
-ListaCircular *criando_lista_circular();
-void destruindo_lista_circular(ListaCircular **lista_referencia);
-void destruindo_lista_circular_2(ListaCircular **lista_referencia);
-void add_inicio_lista(ListaCircular *L, int val);
+Lista *cria_lista();
+void destroi_lista(Lista **lista_ref);
 
-bool lista_esta_vazia(const ListaCircular *L);
+bool lista_esta_vazia(Lista *L);
+
+void adicioona_no_inicio(Lista *L, int val);
+void adiciona_no_fim(Lista *L, int val);
+void print(Lista *L);
+void remove_da_lista(Lista *L, int val);

@@ -37,11 +37,13 @@ int main(){
   matrix_destroy(C);
   printf("\n");
 
-  /*
-    C = matrix_transpose(A);
-    matrix_print(C);
-    matrix_destroy(C);
-  */
+  
+  C = matrix_transpose(A);
+  printf("Transposta de A: \n");
+  matrix_print(C);
+  printf("\n");
+  
+  matrix_destroy(C);
   matrix_destroy(A);
   matrix_destroy(B);
   return 0;
