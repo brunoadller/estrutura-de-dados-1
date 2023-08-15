@@ -139,7 +139,7 @@ Fila *cria_fila(){
 void destroi_fila(Fila **fila_referencia){
   Fila *f = *fila_referencia;
 
-  destroi_lista(f->dados);
+  destroi_lista(&f->dados);
   free(f);
   *fila_referencia = NULL;
 }
@@ -159,7 +159,7 @@ void enfileirar(Fila *f,int val){
   adiciona_final(f->dados, val);
 }
 int desenfileirar(Fila *f){
-  int val = pega_primeiro_valor(f);
+  int val = pega_primeiro_valor(f->dados);
   remove_inicio(f->dados);
   return val;
 }

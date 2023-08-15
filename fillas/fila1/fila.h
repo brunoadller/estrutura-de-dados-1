@@ -1,6 +1,7 @@
 #include <stdbool.h>
 typedef struct no No;
 typedef struct lista Lista;
+typedef struct fila Fila;
 
 /*LISTA DUPLAMENTE ENCADEADA COM AS FUNÇÕES PARA MANIPULAR A FILA*/
 No * cria_no(int val);
@@ -16,7 +17,7 @@ void remove_inicio(Lista *l);
 int pega_primeiro_valor(Lista *l);
 
 /*FUNÇÕES DA FILA*/
-typedef struct fila Fila;
+
 
 Fila *cria_fila();
 void destroi_fila(Fila **fila_referencia);

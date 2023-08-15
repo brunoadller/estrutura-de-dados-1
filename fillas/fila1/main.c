@@ -3,6 +3,7 @@
 int main(){
   Fila *f = cria_fila();
 
+  
   enfileirar(f, 2);
   enfileirar(f, 3);
   enfileirar(f, 8);
@@ -12,7 +13,14 @@ int main(){
   enfileirar(f, 21);
   
   imprimir_fila(f);
-  destroi_fila(f);
+
+
+  desenfileirar(f);
+  desenfileirar(f);
+
+  imprimir_fila(f);
+
+  destroi_fila(&f);
   return 0;
 
 }
