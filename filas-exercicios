@@ -1,0 +1,165 @@
+#include "inverte.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+
+typedef struct no{
+    struct no *proximo;
+    struct no *anterior;
+    int valor;
+}No;
+typedef struct lista{
+    No *inicio;
+    No *fim;
+    int tamanho;
+}Lista;
+typedef struct fila{
+    Lista *dados;
+}Fila;
+
+No *criar_no(int val){
+    No *novo_no =  (No *) calloc(1, sizeof(No));
+
+    novo_no->anterior = NULL;
+    novo_no->proximo = NULL;
+    novo_no->valor = val;
+
+    return novo_no;
+}
+Lista * criar_lista(){
+    Lista *nova_lista = (Lista *) calloc(1, sizeof(Lista));
+
+    nova_lista->inicio = NULL;
+    nova_lista->fim = NULL;
+    nova_lista->tamanho = 0;
+
+    return nova_lista;
+}
+
+void destroy_lista(Lista **ref){
+    Lista *l = *ref;
+
+    No *p = l->inicio;
+    No *aux = NULL;
+
+    while (p != NULL)
+    {
+        aux = p;
+        p = p->proximo;
+        free(aux);
+        
+    }
+    free(l);
+    *ref = NULL;
+    
+}
+bool lista_vazia(Lista *l){
+    return l->tamanho == 0;
+}
+int lista_tamanho(Lista *l){
+    return l->tamanho;
+}
+void adiciona_final(Lista *l, int val){
+    No *novo_no = criar_no(val);
+
+    novo_no->anterior = l->fim;
+    if(lista_vazia(l)){
+        l->inicio = novo_no;
+    }else{
+        l->fim->proximo = novo_no;
+    }
+    l->fim = novo_no;
+    l->tamanho++;
+}
+void imprimir(Lista *l){
+    No *p = l->inicio;
+    while(p != NULL){
+        printf(" %d -> ", p->valor);
+        p = p->proximo;
+    }
+    printf("NULL\n");
+    if(l->fim == NULL){
+        printf("L->final = %d", l->fim->valor);
+    }
+    printf("TAMANHO: %d\n", l->tamanho);
+    puts(" ");
+}
+
+void imprimir_invertido(Lista *l){
+    No *p = l->fim;
+
+
+    puts(" ");
+    printf("L -> fim -> ");
+    while(p != NULL){
+        printf("%d -> ", p->valor);
+        p = p->anterior;
+    }
+    if(l->fim != NULL){
+        printf("\nL->inicio = %d", l->inicio->valor);
+
+    }else{
+        printf("L->inicio = NULL\n");
+    }
+    puts("");
+}
+
+void remove_inicio(Lista *l){
+    if(!lista_vazia(l)){
+        No *p = l->inicio;
+        if(l->inicio == l->fim){
+            l->inicio = NULL;
+            l->fim = NULL;
+        }else{
+            l->inicio = l->inicio->proximo;
+            l->inicio->anterior = NULL;
+        }
+        free(p);
+        l->tamanho--;
+    }
+}
+int pega_primeiro_valor(Lista *l){
+    if(lista_vazia(l)){
+        exit(EXIT_FAILURE);
+    }
+    return l->inicio->valor;
+}
+Fila *criar_fila(){
+    Fila *f = (Fila *) calloc(1, sizeof(Fila));
+    f->dados = criar_lista();
+    return f;
+}
+
+void destroi_fila(Fila **ref){
+    Fila *f = *ref;
+
+    destroy_lista(&f->dados);
+    free(f);
+    *ref = NULL;
+}
+bool fila_vazia(Fila *f){
+    return lista_vazia(f->dados);
+}
+int tamanho_fila(Fila *f){
+    return lista_tamanho(f->dados);
+}
+int consultar_fila(Fila *f){
+    return pega_primeiro_valor(f->dados);
+}
+void enfileirar(Fila *f, int val){
+    adiciona_final(f->dados, val);
+}
+
+int desenfileirar(Fila *f){
+    int val = pega_primeiro_valor(f->dados);
+
+    remove_inicio(f->dados);
+    return val;
+}
+void imprimir_fila(Fila *f){
+    imprimir(f->dados);
+}
+void imprimir_fila_invertida(Fila *f){
+    imprimir_invertido(f->dados);
+}
