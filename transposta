@@ -1,0 +1,28 @@
+Matriz *matrix_transpose(Matriz *matA){
+    int i=0, j=0;
+    Matriz *transposta;
+    Celula *pCelulaA;
+
+    if (matA->n != matA->m){ 
+        printf("\nNao foi possivel calcular a transposta de A");
+        return NULL;
+    }
+
+    if (!matA || !matA->m || !matA->n){
+        return NULL;
+    }
+    pCelulaA = matA->inicio->abaixo;
+    transposta = matrix_create(matA->m, matA->n); //C é formada pelo numero de linhas de A e de colunas de 
+
+    for (i = 1; i <= matA->m; i++){
+        for (j = 1; j <= matA->n; j++){
+          if (pCelulaA->direita->linha == i && pCelulaA->direita->coluna == j){
+            matrix_setelem(transposta,j, i, pCelulaA->direita->valor);
+            pCelulaA = pCelulaA->direita;
+          }
+        }
+       pCelulaA = pCelulaA->direita->abaixo;
+    }
+       
+    return transposta;
+}
