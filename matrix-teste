@@ -1,0 +1,46 @@
+atriz *matrix_create_for_test(unsigned int m){
+
+    srand(time(NULL));
+    int i, j;
+    float valorSorteado;
+    Matriz *mat = matrix_create(m, m);
+
+    Celula *pCelula = mat->inicio->abaixo;
+
+    for(i = 1; i < mat->m; i++){
+        for(j = 1; j < mat->n; j++){
+
+               valorSorteado = rand(); 
+               matrix_setelem(mat, i, j, valorSorteado);
+               pCelula = pCelula->direita;
+        }
+        pCelula = pCelula->direita->abaixo;
+    }
+
+    return mat;
+
+}
+void matrix_print_for_test(Matriz *mat){
+    int i, j;
+    Celula *pCelula;
+
+    if (!mat || !mat->m || !mat->n){
+       exit(EXIT_FAILURE);
+    }
+
+    pCelula = mat->inicio->abaixo;
+
+    printf("\n");
+
+    for (i = 1; i <= mat->m; i++){
+        for (j = 1; j <= mat->n; j++){
+            if (pCelula->direita->linha == i && pCelula->direita->coluna == j){
+                pCelula = pCelula->direita;
+                printf("  \t%0.2f   ", pCelula->valor);
+            }
+        }
+        printf("\n");
+        pCelula = pCelula->direita->abaixo;
+    }
+
+}
