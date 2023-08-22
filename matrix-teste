@@ -1,4 +1,4 @@
-atriz *matrix_create_for_test(unsigned int m){
+Matriz *matrix_create_for_test(unsigned int m){
 
     srand(time(NULL));
     int i, j;

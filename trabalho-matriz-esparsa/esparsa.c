@@ -1,6 +1,7 @@
 #include "esparsa.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 struct celula{
   Celula *direita;
@@ -190,6 +191,7 @@ void matrix_print(Matriz *mat){
     }
 
 }
+
 void matrix_destroy(Matriz *mat){
     int i = 1;
     int j = 1;
@@ -330,25 +332,73 @@ Matriz *matrix_multiply(Matriz *matA, Matriz *matB){
 }
 Matriz *matrix_transpose(Matriz *matA){
     int i=0, j=0;
-    float total = 0;
     Matriz *transposta;
+    Celula *pCelulaA;
 
     if (matA->n != matA->m){ 
-        printf("\nNao foi possivel multiplicar as matrizes\nnumero de colunas de A eh diferente do numero de linhas de B\n");
+        printf("\nNao foi possivel calcular a transposta de A");
         return NULL;
     }
 
     if (!matA || !matA->m || !matA->n){
         return NULL;
     }
-
-    transposta = matrix_create(matA->m, matA->n); //C é formada pelo numero de linhas de A e de colunas de 
+    pCelulaA = matA->inicio->abaixo;
+    transposta = matrix_create(matA->m, matA->n); 
 
     for (i = 1; i <= matA->m; i++){
         for (j = 1; j <= matA->n; j++){
-          transposta->inicio->direita->coluna = i;
-          transposta->inicio->direita->linha = j;
+          if (pCelulaA->direita->linha == i && pCelulaA->direita->coluna == j){
+            matrix_setelem(transposta,j, i, pCelulaA->direita->valor);
+            pCelulaA = pCelulaA->direita;
+          }
         }
+       pCelulaA = pCelulaA->direita->abaixo;
     }
+       
     return transposta;
+}
+Matriz *matrix_create_for_test(unsigned int m){
+
+    srand(time(NULL));
+    int i, j;
+    Matriz *mat = matrix_create(m, m);
+
+    Celula *pCelula = mat->inicio->abaixo;
+
+    for(i = 1; i < mat->m; i++){
+        for(j = 1; j < mat->n; j++){
+               matrix_setelem(mat, i, j, rand()%100);
+               pCelula = pCelula->direita;
+             
+        }
+        pCelula = pCelula->direita->abaixo;
+    }
+
+    return mat;
+
+}
+void matrix_print_for_test(Matriz *mat){
+    int i, j;
+    Celula *pCelula;
+
+    if (!mat || !mat->m || !mat->n){
+       exit(EXIT_FAILURE);
+    }
+
+    pCelula = mat->inicio->abaixo;
+
+    printf("\n");
+
+    for (i = 1; i <= mat->m; i++){
+        for (j = 1; j <= mat->n; j++){
+           if (pCelula->direita->linha == i && pCelula->direita->coluna == j){
+              pCelula = pCelula->direita;
+              printf("  \t%0.2f   ", pCelula->valor);
+           }
+        }
+        printf("\n");
+        pCelula = pCelula->direita->abaixo;
+    }
+
 }

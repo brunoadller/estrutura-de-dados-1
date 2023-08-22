@@ -1,8 +1,12 @@
 #include "esparsa.h"
 #include <stdio.h>
+#include <time.h>       
+
 
 int main(){
-  //criando matriz A
+  
+
+  //Primeira matriz do primeiro teste
   Matriz *A = matrix_create(4,4);
   matrix_setelem(A, 1, 1,50.0);
   matrix_setelem(A, 2, 1,10.0);
@@ -25,14 +29,14 @@ int main(){
   printf("\n");
 
   Matriz *C = matrix_add(A,B);
-  printf("Matriz C: \n");
+  printf("Matriz A e B somadas: \n");
   matrix_print(C);
   matrix_destroy(C);
   printf("\n");
 
 
   C = matrix_multiply(A,B);
-  printf("Multiplicacao de A e C: \n");
+  printf("Matriz A e B multiplicadas: \n");
   matrix_print(C);
   matrix_destroy(C);
   printf("\n");
@@ -46,5 +50,6 @@ int main(){
   matrix_destroy(C);
   matrix_destroy(A);
   matrix_destroy(B);
-  return 0;
+
+  
 }
