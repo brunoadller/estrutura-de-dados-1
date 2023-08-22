@@ -8,31 +8,31 @@ int main(){
  
   clock_t inicio = clock();
   printf("Matriz A: \n");
-  Matriz *mA = matrix_create_for_test(10);
+  Matriz *mA = matrix_create_for_test(5);
   matrix_print_for_test( mA );
   
   printf("Matriz B: \n");
-  Matriz *mB = matrix_create_for_test(10);
+  Matriz *mB = matrix_create_for_test(5);
   matrix_print_for_test( mB );
 
-  printf("Matriz A e B somadas: \n");
-  Matriz *mC = matrix_add( mA, mB );
-  matrix_print_for_test( mC );
+  printf("Soma da Matriz A e B: \n");
+  Matriz *mC = matrix_add(mA, mB);
+  matrix_print_for_test(mC);
+  
   matrix_destroy( mC );
+  
+  printf("Multiplicacao de A e B");
+  mC = matrix_multiply(mA, mB);
+  matrix_print_for_test(mC);
+  matrix_destroy( mC );
+  
+  printf("Trasposta de A");
+  mC = matrix_transpose(mA);
+  matrix_print_for_test(mC);
 
-  printf("Matriz A e B multiplicadas: \n");
-  mC = matrix_multiply( mA, mB );
-  matrix_print_for_test( mC );
   matrix_destroy( mC );
-
-  printf("Transposta de A: \n");
-  mC = matrix_transpose( mA );
-  matrix_print_for_test( mC );
-  matrix_destroy( mC );
- 
-  matrix_destroy( mA );
   matrix_destroy( mB );
-
+  matrix_destroy( mA );
   clock_t fim = clock();
   time += (double)(fim - inicio) / CLOCKS_PER_SEC;
   printf("tempo de  %f segundos", time);

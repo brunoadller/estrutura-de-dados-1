@@ -358,19 +358,20 @@ Matriz *matrix_transpose(Matriz *matA){
        
     return transposta;
 }
-Matriz *matrix_create_for_test(unsigned int m){
+Matriz *matrix_create_for_test(int m){
 
     srand(time(NULL));
     int i, j;
-    Matriz *mat = matrix_create(m, m);
+    Matriz *mat = matrix_create(m,m);
 
     Celula *pCelula = mat->inicio->abaixo;
 
-    for(i = 1; i < mat->m; i++){
-        for(j = 1; j < mat->n; j++){
-               matrix_setelem(mat, i, j, rand()%100);
-               pCelula = pCelula->direita;
-             
+    for(i = 1; i <= mat->m; i++){
+        for(j = 1; j <=mat->n; j++){
+          
+            matrix_setelem(mat, i, j, rand()%100 );
+            pCelula = pCelula->direita;
+          
         }
         pCelula = pCelula->direita->abaixo;
     }
@@ -392,10 +393,10 @@ void matrix_print_for_test(Matriz *mat){
 
     for (i = 1; i <= mat->m; i++){
         for (j = 1; j <= mat->n; j++){
-           if (pCelula->direita->linha == i && pCelula->direita->coluna == j){
-              pCelula = pCelula->direita;
-              printf("  \t%0.2f   ", pCelula->valor);
-           }
+         if (pCelula->direita->linha == i && pCelula->direita->coluna == j){
+          pCelula = pCelula->direita;
+          printf("  \t%0.2f   ", pCelula->valor);
+         }
         }
         printf("\n");
         pCelula = pCelula->direita->abaixo;
