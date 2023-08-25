@@ -10,19 +10,33 @@ struct celula{
   int coluna;
   float valor;
 };
-struct matrizEsparca{
+
+struct matriz{
    int m, n;
    Celula *inicio;
    Celula *fimLinha;
    Celula *fimColuna;
 };
 
+/*
+  FUNCOES PARA MANIPULAR A MATRIZ COM LISTAS CIRCULARES
+  CRIA A MATRIZ
+  INICIA AS CABECAS DA MATRIZ
+  E COM ISSO INICIA AS CABEÇAS DE LINHAS E COLUNAS
+  SETA OS VALORES NAS POSICOES DA MATRIZ
+  IMPRIME A MATRIZ
+  PEGA VALORES DA MATRIZ DE UMA DADA POSICAO
+  SOMA UMA MATRIZ A E B
+  MULTIPLICA UMA MATRIZ A E B
+  CALCULA A TRASPOSTA DE UMA MATRIZ
+*/
+
 //m = linha e n = colunas
 Matriz *matrix_create(int m, int n){
   Matriz *mat = (Matriz*) calloc(1, sizeof(Matriz));
 
   if(!mat || m <= 0 || n <=0){
-    return 0;
+    return NULL;
   }
   //inicia as variaveis da struct
   mat->inicio = NULL;
@@ -31,13 +45,13 @@ Matriz *matrix_create(int m, int n){
   mat->m = m;
   mat->n = n;
 
-  iniciaCabecas(mat);
+  iniciaCabecasDaMatriz(mat);
 
   return mat;
 
 }
 
-int iniciaCabecas(Matriz *mat){
+int iniciaCabecasDaMatriz(Matriz *mat){
   int i = 0;
   //aloca para uma cabeca que sao do tipo celula
   Celula *cabeca = (Celula *) calloc(1, sizeof(Celula));
@@ -56,14 +70,14 @@ int iniciaCabecas(Matriz *mat){
   mat->fimColuna = cabeca;
 
   for(i = 1; i <= mat->n; i++){
-    insereCabecaColuna(mat);
+    insereCabecaDaColuna(mat);
   }
   for(i = 1; i <= mat->m; i++){
-    insereCabecaLinha(mat);
+    insereCabecaDaLinha(mat);
   }
   return 1;
 }
-int insereCabecaColuna(Matriz *mat){
+int insereCabecaDaColuna(Matriz *mat){
   Celula *cabeca = (Celula*) calloc(1, sizeof(Celula));
 
   if(!cabeca){
@@ -79,7 +93,7 @@ int insereCabecaColuna(Matriz *mat){
   cabeca->abaixo = cabeca;
   return 1;
 }
-int insereCabecaLinha(Matriz *mat){
+int insereCabecaDaLinha(Matriz *mat){
   Celula *cabeca = (Celula*) calloc(1, sizeof(Celula));
 
   if(!cabeca){
@@ -98,7 +112,6 @@ int insereCabecaLinha(Matriz *mat){
 }
 void matrix_setelem(Matriz *mat, int linha, int coluna, float valor){
   int i;
-
     if (!mat || mat->m <= 0 || mat->n <= 0 || !valor){ //esses testes sao feitos tbm na funcao lerMatriz
         exit(EXIT_FAILURE);
     }
@@ -162,7 +175,7 @@ void matrix_setelem(Matriz *mat, int linha, int coluna, float valor){
     pCelula->abaixo = pCelulaColuna->abaixo;//aponta para a cabeca
     pCelulaColuna->abaixo = pCelula;//ultima celula ou cabeca, senao tiver celulas, aponta para a celula
   }
-  
+
 }
 void matrix_print(Matriz *mat){
     int i, j;
@@ -305,18 +318,15 @@ Matriz *matrix_multiply(Matriz *matA, Matriz *matB){
     int i=0, j=0, k=0;
     float total;
     Matriz *matC;
-
     if (matA->n != matB->m){ //so pode multiplicar se o numero de colunas de A eh igual ao numero de linhas de B
         printf("\nNao foi possivel multiplicar as matrizes\nnumero de colunas de A eh diferente do numero de linhas de B\n");
         return NULL;
     }
-
     if (!matA || !matB || !matA->m || !matA->n || !matB->n){
         return NULL;
     }
 
     matC = matrix_create(matA->m, matB->n); //C é formada pelo numero de linhas de A e de colunas de B
-
     for (i = 1; i <= matA->m; i++){
         for (j = 1; j <= matB->n; j++){
             total = 0;
@@ -330,6 +340,9 @@ Matriz *matrix_multiply(Matriz *matA, Matriz *matB){
     }
     return matC;
 }
+/*
+  CALCULA A MATRIZ TRANSPOSTA E RETORNA A A MESMA
+*/
 Matriz *matrix_transpose(Matriz *matA){
     int i=0, j=0;
     Matriz *transposta;
@@ -358,31 +371,28 @@ Matriz *matrix_transpose(Matriz *matA){
        
     return transposta;
 }
-Matriz *matrix_create_for_test(int m){
 
+/*
+  FUNCOES PARA TESTAR A MATRIZ DE FORMA RADOMICA COM LISTA
+  CRIA A MATRIZ PARA O TESTE
+  IMPRIMI A MATRIZ
+*/
+Matriz *matrix_create_for_test(unsigned int m){
     srand(time(NULL));
-    int i, j;
+    int i = 0, j = 0;
     Matriz *mat = matrix_create(m,m);
-
-    Celula *pCelula = mat->inicio->abaixo;
-
+    
     for(i = 1; i <= mat->m; i++){
         for(j = 1; j <=mat->n; j++){
-          
-            matrix_setelem(mat, i, j, rand()%100 );
-            pCelula = pCelula->direita;
-          
+          matrix_setelem(mat, i, j, i+60.8 );
         }
-        pCelula = pCelula->direita->abaixo;
     }
-
     return mat;
 
 }
 void matrix_print_for_test(Matriz *mat){
-    int i, j;
+    int i = 0, j = 0;
     Celula *pCelula;
-
     if (!mat || !mat->m || !mat->n){
        exit(EXIT_FAILURE);
     }
@@ -390,7 +400,6 @@ void matrix_print_for_test(Matriz *mat){
     pCelula = mat->inicio->abaixo;
 
     printf("\n");
-
     for (i = 1; i <= mat->m; i++){
         for (j = 1; j <= mat->n; j++){
          if (pCelula->direita->linha == i && pCelula->direita->coluna == j){
@@ -402,4 +411,72 @@ void matrix_print_for_test(Matriz *mat){
         pCelula = pCelula->direita->abaixo;
     }
 
+}
+/*
+  FUNÇÕES PARA MANIPULAR A MATRIZ COM FORÇA BRUTA
+  CRIA MATRIZ
+  INSERE VALORES RADOMICOS NA MATRIZ
+  MULTIPLICA A MATRIZ
+  IMPRIMI A MATRIZ E DESTROY A MATRIZ
+*/
+float **cria_matriz_forca_bruta(unsigned int m){
+  int i, j;
+  float **mat;
+
+  mat = (float**) calloc(m, sizeof(float*));
+  if(mat == NULL){
+      exit(EXIT_FAILURE);
+  }
+  for(i = 0; i < m; i++){
+    mat[i] = (float*) calloc(m, sizeof(float));
+    if(mat[i] == NULL){
+      exit(EXIT_FAILURE);
+    }
+  }
+  return mat;
+}
+void insere_matriz_forca_bruta(float **matriz, unsigned int m){
+   int i, j;
+   srand(time(NULL));
+   for(i = 0; i < m; i++){
+    for(j = 0; j < m; j++){
+      matriz[i][j] = rand() % 1000;
+    }
+   }
+}
+void imprimi_matriz_forca_bruta(float **matriz, unsigned int m){
+  int i, j;
+  printf("\n");
+  for(i = 0; i < m; i++){
+    for(j = 0; j< m; j++){
+      printf(" %.2f ", matriz[i][j]);
+    }
+    printf("\n");
+  }
+}
+void destroi_matriz_forca_bruta(float **matriz, unsigned int m){
+  int i;
+  for(i = 0; i < m; i++){
+    free(matriz[i]);
+  }
+  free(matriz);
+  matriz = NULL;
+}
+void multiplica_matriz_forca_bruta(float **matrizA, float **matrizB, float **matrizC, unsigned int m){
+  int i=0, j=0, k=0;
+  float total;
+
+  for (i = 0; i < m; i++){
+    for (j = 0; j < m; j++){
+
+      matrizC[i][j] = 0;
+
+      for (k = 0; k < m; k++){
+        total += matrizA[i][k] * matrizB[k][j];
+      }
+
+      matrizC[i][j] = total;
+      total = 0;
+    }
+  }
 }
