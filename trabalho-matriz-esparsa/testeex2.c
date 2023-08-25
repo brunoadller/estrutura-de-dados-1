@@ -10,36 +10,34 @@ int main(){
   /*
     *****TESTE DA MATRIZ COM LISTA *********
   */
-  printf("Matriz A: \n");
   Matriz *mA = matrix_create_for_test(100);
-  matrix_print_for_test(mA);
-  
-  printf("Matriz B: \n");
   Matriz *mB = matrix_create_for_test(100);
-  matrix_print_for_test(mB);
-
   printf("Multiplicacao de A e B");
   Matriz *mC = matrix_multiply(mA, mB);
   matrix_print_for_test(mC);
   
-  matrix_destroy( mC );
-  matrix_destroy( mB );
   matrix_destroy( mA );
+  matrix_destroy( mB );
+  matrix_destroy( mC );
+
   
  /*
   *****TESTE DA MATRIZ POR FORÇA BRUTA********
  */
-  float **mA = cria_matriz_forca_bruta(5);
-  float **mB = cria_matriz_forca_bruta(5);
-  float **mC = cria_matriz_forca_bruta(5);
+  /*
+  unsigned int tamanho = 10000;
+  float **mA = cria_matriz_forca_bruta(tamanho);
+  float **mB = cria_matriz_forca_bruta(tamanho);
+  float **mC = cria_matriz_forca_bruta(tamanho);
 
-  insere_matriz_forca_bruta(mA, 5);
-  insere_matriz_forca_bruta(mB, 5);
-  multiplica_matriz_forca_bruta(mA,mB,mC,5);
-  imprimi_matriz_forca_bruta(mC,5);
-  destroi_matriz_forca_bruta(mA,5);
-  destroi_matriz_forca_bruta(mB,5);
-  destroi_matriz_forca_bruta(mC,5);
+  insere_matriz_forca_bruta(mA, tamanho);
+  insere_matriz_forca_bruta(mB, tamanho);
+  multiplica_matriz_forca_bruta(mA,mB,mC,tamanho);
+  imprimi_matriz_forca_bruta(mC,tamanho);
+  destroi_matriz_forca_bruta(mA,tamanho);
+  destroi_matriz_forca_bruta(mB,tamanho);
+  destroi_matriz_forca_bruta(mC,tamanho);
+  */
   clock_t fim = clock();
   time += (double)(fim - inicio) / CLOCKS_PER_SEC;
   printf("tempo de  %f segundos", time);

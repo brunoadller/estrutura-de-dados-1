@@ -381,10 +381,11 @@ Matriz *matrix_create_for_test(unsigned int m){
     srand(time(NULL));
     int i = 0, j = 0;
     Matriz *mat = matrix_create(m,m);
-    
+    float sort1, sort2;
     for(i = 1; i <= mat->m; i++){
+        sort1 = 1 + (rand() % 30);
         for(j = 1; j <=mat->n; j++){
-          matrix_setelem(mat, i, j, i+60.8 );
+          matrix_setelem(mat, i, j, (1 +(rand() % 1000))/sort1);
         }
     }
     return mat;
