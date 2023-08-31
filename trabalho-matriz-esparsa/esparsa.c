@@ -152,7 +152,7 @@ void matrix_setelem(Matriz *mat, int linha, int coluna, float valor){
   }
   if(pCelulaLinha->direita->linha == -1){//a celula esta mais a direita
     pCelula->direita = pCelulaLinha->direita;//aponta para a cabeca
-    pCelulaLinha->direita = pCelula;//ultima celula ou cabeca, senao tiver celulas, aponta para celulula
+    pCelulaLinha->direita = pCelula;//ultima celula ou cabeca, senao tiver celulas, aponta para celula
   }
   //linha encontrada e apontada
 

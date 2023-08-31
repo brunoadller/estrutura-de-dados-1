@@ -10,8 +10,9 @@ int main(){
   /*
     *****TESTE DA MATRIZ COM LISTA *********
   */
-  Matriz *mA = matrix_create_for_test(100);
-  Matriz *mB = matrix_create_for_test(100);
+  /*
+  Matriz *mA = matrix_create_for_test(1000);
+  Matriz *mB = matrix_create_for_test(1000);
   printf("Multiplicacao de A e B");
   Matriz *mC = matrix_multiply(mA, mB);
   matrix_print_for_test(mC);
@@ -19,13 +20,13 @@ int main(){
   matrix_destroy( mA );
   matrix_destroy( mB );
   matrix_destroy( mC );
-
+  */
   
  /*
   *****TESTE DA MATRIZ POR FORÇA BRUTA********
  */
-  /*
-  unsigned int tamanho = 10000;
+  
+  unsigned int tamanho = 5120;
   float **mA = cria_matriz_forca_bruta(tamanho);
   float **mB = cria_matriz_forca_bruta(tamanho);
   float **mC = cria_matriz_forca_bruta(tamanho);
@@ -37,7 +38,7 @@ int main(){
   destroi_matriz_forca_bruta(mA,tamanho);
   destroi_matriz_forca_bruta(mB,tamanho);
   destroi_matriz_forca_bruta(mC,tamanho);
-  */
+  
   clock_t fim = clock();
   time += (double)(fim - inicio) / CLOCKS_PER_SEC;
   printf("tempo de  %f segundos", time);
